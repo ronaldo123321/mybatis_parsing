@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -100,6 +100,7 @@ public class TransactionalCache implements Cache {
       delegate.clear();
     }
     flushPendingEntries();
+    //一个Excutor可以提交多次事务，所以TransactionalCache需要被重用，那么及需要回归到初始状态。
     reset();
   }
 

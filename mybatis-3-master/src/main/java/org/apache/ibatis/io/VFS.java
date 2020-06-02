@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import org.apache.ibatis.logging.LogFactory;
 /**
  * Provides a very simple API for accessing resources within an application server.
  * 虚拟文件系统抽象类
+ * 虚拟文件系统：主要是通过程序能方便读取本地文件系统，FTP文件系统等系统中的文件资源。
+ * mybatis提供的这个VFS配置，主要是通过该配置可以加载自定义的虚拟文件系统应用程序。
  * @author Ben Gunter
  */
 public abstract class VFS {

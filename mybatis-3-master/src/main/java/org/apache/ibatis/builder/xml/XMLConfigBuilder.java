@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -156,7 +156,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     Class<? extends Log> logImpl = resolveClass(props.getProperty("logImpl"));
     configuration.setLogImpl(logImpl);
   }
-
+  //所有别名加载入typeAliases（HashMap: key=>别名首字母小写 value=>具体类的Class对象 ）
   private void typeAliasesElement(XNode parent) {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -224,7 +224,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       configuration.setReflectorFactory(factory);
     }
   }
-
+  //因为Properties是继承自HashTable，后面put进去会覆盖原来的值，这里mybatis <properties>属性配置加载优先级为：外部自定义配置>配置文件配置>xml中的配置
   private void propertiesElement(XNode context) throws Exception {
     if (context != null) {
       //读取子标签，为Properties对象
@@ -351,7 +351,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
     throw new BuilderException("Environment declaration requires a DataSourceFactory.");
   }
-
+  //typeHandler类型处理器，主要是为了处理java pojo对象中的参数类型与数据库中的参数类型的转换，一般有系统定义与用户自定义两种，一般来说，系统定义的类型处理器已足够完成大部分功能。
   private void typeHandlerElement(XNode parent) {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -382,23 +382,28 @@ public class XMLConfigBuilder extends BaseBuilder {
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
+        //首先要判断package这个子元素是否存在，存在则解析之，一般package所用不多
         if ("package".equals(child.getName())) {
           String mapperPackage = child.getStringAttribute("name");
           configuration.addMappers(mapperPackage);
         } else {
+          //重点是这里的解析，分别解析resource,url,class三个属性中的一个，
           String resource = child.getStringAttribute("resource");
           String url = child.getStringAttribute("url");
           String mapperClass = child.getStringAttribute("class");
+          //使用相对于类路径的资源引用
           if (resource != null && url == null && mapperClass == null) {
             ErrorContext.instance().resource(resource);
             InputStream inputStream = Resources.getResourceAsStream(resource);
             XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperParser.parse();
+            //使用完全限定资源定位符（URL）
           } else if (resource == null && url != null && mapperClass == null) {
             ErrorContext.instance().resource(url);
             InputStream inputStream = Resources.getUrlAsStream(url);
             XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url, configuration.getSqlFragments());
             mapperParser.parse();
+            //使用映射器接口实现类的完全限定类名
           } else if (resource == null && url == null && mapperClass != null) {
             Class<?> mapperInterface = Resources.classForName(mapperClass);
             configuration.addMapper(mapperInterface);

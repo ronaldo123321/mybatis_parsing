@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,12 +28,17 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 public class ParameterMapping {
 
   private Configuration configuration;
-
+  //属性名
   private String property;
+  //参数类型
   private ParameterMode mode;
+  //java类型
   private Class<?> javaType = Object.class;
+  //jdbc类
   private JdbcType jdbcType;
+  //对于数值类型，还有一个小数保留位数的设置，来确定小数点后保留的位数
   private Integer numericScale;
+  //typeHandler对象
   private TypeHandler<?> typeHandler;
   private String resultMapId;
   private String jdbcTypeName;

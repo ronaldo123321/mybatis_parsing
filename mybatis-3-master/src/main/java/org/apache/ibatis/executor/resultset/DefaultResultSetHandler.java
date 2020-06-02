@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -352,7 +352,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
   private void handleRowValuesForSimpleResultMap(ResultSetWrapper rsw, ResultMap resultMap, ResultHandler<?> resultHandler, RowBounds rowBounds, ResultMapping parentMapping)
       throws SQLException {
+    //创建DefaultResultContext对象
     DefaultResultContext<Object> resultContext = new DefaultResultContext<>();
+    //获得ResultSet对象，并跳到指定开始的位置
     ResultSet resultSet = rsw.getResultSet();
     //跳到offset位置，准备读取
     skipRows(resultSet, rowBounds);
@@ -641,12 +643,17 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   //
 
   private Object createResultObject(ResultSetWrapper rsw, ResultMap resultMap, ResultLoaderMap lazyLoader, String columnPrefix) throws SQLException {
+    //表示是否使用构造方法创建该结果对象，此处将重置
     this.useConstructorMappings = false; // reset previous mapping result
+    //记录使用构造方法的参数类型 数组
     final List<Class<?>> constructorArgTypes = new ArrayList<>();
+    //记录使用构造方法的参数值的数组
     final List<Object> constructorArgs = new ArrayList<>();
+    //创建映射后的结果对象
     Object resultObject = createResultObject(rsw, resultMap, constructorArgTypes, constructorArgs, columnPrefix);
     if (resultObject != null && !hasTypeHandlerForResultObject(rsw, resultMap.getType())) {
       final List<ResultMapping> propertyMappings = resultMap.getPropertyResultMappings();
+      //如果有内嵌查询并且开启懒加载，则创建结果对象的代理对象
       for (ResultMapping propertyMapping : propertyMappings) {
         // issue gcode #109 && issue #149
         if (propertyMapping.getNestedQueryId() != null && propertyMapping.isLazy()) {

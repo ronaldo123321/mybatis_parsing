@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
+ *    Copyright ${license.git.copyrightYears} the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -34,6 +34,13 @@ class CacheBuilderTest {
     InitializingCache cache = unwrap(new CacheBuilder("test").implementation(InitializingCache.class).build());
 
     Assertions.assertThat(cache.initialized).isTrue();
+  }
+
+  @Test
+  void testDecorater(){
+    Cache test = new CacheBuilder("test").build();
+    test.putObject("aa","yy");
+    System.out.println(test.getObject("aa"));
   }
 
   @Test
